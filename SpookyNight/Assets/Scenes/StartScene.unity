@@ -2440,7 +2440,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1089814079}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: StartUI, Assembly-CSharp
         m_MethodName: StartGame
         m_Mode: 1
@@ -10702,7 +10702,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &948759737
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12647,6 +12647,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1089814078}
   - component: {fileID: 1089814079}
+  - component: {fileID: 1089814080}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -12678,9 +12679,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 1089814077}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce3e1a6de2805f749ae5a20c35bb939f, type: 3}
+  m_Script: {fileID: 11500000, guid: ea58565da98c7d94493398ecd4b44d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startButton: {fileID: 248492714}
+  exitButton: {fileID: 1945632633}
+--- !u!114 &1089814080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089814077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e90ad726364b0a4cb5505093cd1d5ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playTime: 0
+  totalKills: 0
+  totalPumpkins: 0
+  isGameOver: 0
+  isGameClear: 0
 --- !u!1001 &1101038554
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14383,7 +14403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4268991725060980441, guid: c698985a1ca7d654592eb09e0dd50b32, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.1020908
+      value: 1.06
       objectReference: {fileID: 0}
     - target: {fileID: 4268991725060980441, guid: c698985a1ca7d654592eb09e0dd50b32, type: 3}
       propertyPath: m_LocalPosition.y
@@ -19965,7 +19985,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1089814079}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: StartUI, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1
