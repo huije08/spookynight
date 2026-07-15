@@ -10,10 +10,10 @@ public class WaveManager : MonoBehaviour
     public float timeBetweenWaves = 3f;
 
     [Header("적 프리팹")]
-    public GameObject zombiePrefab;
-    public GameObject batPrefab;
-    public GameObject knightPrefab;
-    public GameObject bossPrefab;
+    public GameObject BooPrefab;
+    public GameObject AxeBooPrefab;
+    public GameObject WitchBooPrefab;
+    public GameObject BossPrefab;
 
     [Header("스폰 설정")]
     public float spawnRadius = 20f;
@@ -86,9 +86,9 @@ public class WaveManager : MonoBehaviour
         enemiesAlive = zombieCount + batCount + knightCount;
         waveInProgress = true;
 
-        StartCoroutine(SpawnEnemies(zombiePrefab,  zombieCount, 0.3f));
-        StartCoroutine(SpawnEnemies(batPrefab,     batCount,    0.2f));
-        StartCoroutine(SpawnEnemies(knightPrefab,  knightCount, 0.5f));
+        StartCoroutine(SpawnEnemies(BooPrefab,  zombieCount, 0.3f));
+        StartCoroutine(SpawnEnemies(AxeBooPrefab,     batCount,    0.2f));
+        StartCoroutine(SpawnEnemies(WitchBooPrefab,  knightCount, 0.5f));
     }
 
     IEnumerator SpawnEnemies(GameObject prefab, int count, float interval)
@@ -133,9 +133,9 @@ public class WaveManager : MonoBehaviour
     // ─── 보스 스폰 ────────────────────────────────────────────
     void SpawnBoss()
     {
-        if (bossPrefab == null) return;
+        if (BossPrefab == null) return;
 
-        Instantiate(bossPrefab, GetSpawnPosition(), Quaternion.identity);
+        Instantiate(BossPrefab, GetSpawnPosition(), Quaternion.identity);
         enemiesAlive = 1;
         waveInProgress = true;
         Debug.Log("보스 등장!");

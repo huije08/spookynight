@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
     public Button[] augmentButtons;            // 버튼 3개
     public TextMeshProUGUI[] augmentNameTexts; // 버튼별 이름
     public TextMeshProUGUI[] augmentDescTexts; // 버튼별 설명
+    public Image[] augmentIcons;               // 버튼 아이콘
 
     [Header("상점 UI")]
     public GameObject shopPanel;
@@ -144,9 +145,31 @@ public class UIManager : MonoBehaviour
         {
             if (i < choices.Count && choices[i] != null)
             {
+                Augment a = choices[i];
                 augmentButtons[i].gameObject.SetActive(true);
-                augmentNameTexts[i].text = choices[i].augmentName;
-                augmentDescTexts[i].text = choices[i].description;
+
+                // 이름 + 레벨 표시
+                if (a.IsOwned)
+                    augmentNameTexts[i].text = $"{a.augmentName}  Lv{a.currentLevel} → {a.currentLevel + 1}";
+                else
+                    augmentNameTexts[i].text = $"{a.augmentName}  NEW";
+
+                // description → GetNextDesc()로 변경
+                augmentDescTexts[i].text = a.GetNextDesc();
+
+                // 아이콘
+                if (augmentIcons != null && augmentIcons[i] != null)
+                {
+                    if (a.icon != null)
+                    {
+                        augmentIcons[i].sprite = a.icon;
+                        augmentIcons[i].enabled = true;
+                    }
+                    else
+                    {
+                        augmentIcons[i].enabled = false;
+                    }
+                }
             }
             else
             {

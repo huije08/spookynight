@@ -1,6 +1,6 @@
-using System.Collections;
 using UnityEngine;
-
+using System.Collections;
+ 
 public class PlayerShooting : MonoBehaviour
 {
     [Header("기본 스탯")]
@@ -10,22 +10,24 @@ public class PlayerShooting : MonoBehaviour
 
     [Header("레퍼런스")]
     public Camera cam;
-    public LaserBeam laserBeam;
+    public Transform gunPoint;
 
     // 증강으로 해금
     [HideInInspector] public bool hasMultiShot = false;
     [HideInInspector] public int bulletCount = 3;
-    [HideInInspector] public float spreadAngle = 15f;
+    [HideInInspector] public float burstInterval = 0.08f;
 
     [HideInInspector] public bool hasChargeShot = false;
     [HideInInspector] public float maxChargeTime = 2f;
     [HideInInspector] public float chargeMultiplier = 3f;
 
     [HideInInspector] public bool hasPiercing = false;
+    [HideInInspector] public float piercingRadius = 0.4f;
 
     private float nextFireTime = 0f;
     private float chargeTime = 0f;
     private bool isCharging = false;
+    private bool isBursting = false;
     private PlayerStats playerStats;
 
     void Start()
@@ -41,7 +43,7 @@ public class PlayerShooting : MonoBehaviour
 
     void HandleShooting()
     {
-        // 우클릭 = 차지샷 (증강 획득 시 활성화)
+        // 우클릭 = 차지샷 (증강 해금 시 활성화)
         if (hasChargeShot)
         {
             if (Input.GetButtonDown("Fire2"))
@@ -54,7 +56,6 @@ public class PlayerShooting : MonoBehaviour
             {
                 chargeTime += Time.deltaTime;
                 chargeTime = Mathf.Clamp(chargeTime, 0f, maxChargeTime);
-                // UIManager.Instance.UpdateChargeBar(chargeTime / maxChargeTime);
             }
 
             if (Input.GetButtonUp("Fire2") && isCharging)
@@ -66,37 +67,39 @@ public class PlayerShooting : MonoBehaviour
             }
         }
 
-        // 좌클릭 = 일반샷 / 멀티샷
-        if (Input.GetButton("Fire1") && Time.time >= nextFireTime && !isCharging)
+        // 좌클릭 = 단발 or 점사
+        if (Input.GetButtonDown("Fire1") && Time.time >= nextFireTime && !isCharging && !isBursting)
         {
             nextFireTime = Time.time + fireRate;
 
             if (hasMultiShot)
-                FireMultiShot();
+                StartCoroutine(BurstFire());
             else
                 FireSingleShot();
         }
     }
 
-    // ─── 단발 ────────────────────────────────────────────────
+    // 단발
     void FireSingleShot()
     {
         FireRaycast(cam.transform.forward, damage);
     }
 
-    // ─── 멀티샷 (증강 해금) ───────────────────────────────────
-    void FireMultiShot()
+    // 점사 (bulletCount발을 burstInterval 간격으로)
+    IEnumerator BurstFire()
     {
+        isBursting = true;
+
         for (int i = 0; i < bulletCount; i++)
         {
-            float offset = Mathf.Lerp(-spreadAngle / 2f, spreadAngle / 2f,
-                                      (float)i / (bulletCount - 1));
-            Vector3 direction = Quaternion.Euler(0f, offset, 0f) * cam.transform.forward;
-            FireRaycast(direction, damage);
+            FireRaycast(cam.transform.forward, damage);
+            yield return new WaitForSeconds(burstInterval);
         }
+
+        isBursting = false;
     }
 
-    // ─── 차지샷 (증강 해금) ───────────────────────────────────
+    // 차지샷
     void FireChargedShot()
     {
         float ratio = chargeTime / maxChargeTime;
@@ -108,7 +111,7 @@ public class PlayerShooting : MonoBehaviour
             FireRaycast(cam.transform.forward, finalDamage);
     }
 
-    // ─── Raycast 공통 ────────────────────────────────────────
+    // Raycast 공통
     void FireRaycast(Vector3 direction, float dmg)
     {
         if (hasPiercing)
@@ -130,17 +133,13 @@ public class PlayerShooting : MonoBehaviour
                 playerStats.OnDamageDealt(dmg);
             }
         }
-
-        laserBeam.Show(cam.transform.position, endPoint, false);
     }
 
-    // ─── 관통 ────────────────────────────────────────────────
+    // 관통
     void FirePiercingShot(float dmg, Vector3 direction)
     {
         RaycastHit[] hits = Physics.SphereCastAll(
-            cam.transform.position, 0.4f, direction, range);
-
-        Vector3 endPoint = cam.transform.position + direction * range;
+            cam.transform.position, piercingRadius, direction, range);
 
         foreach (var hit in hits)
         {
@@ -149,10 +148,7 @@ public class PlayerShooting : MonoBehaviour
             {
                 enemy.TakeDamage(dmg);
                 playerStats.OnDamageDealt(dmg);
-                endPoint = hit.point;
             }
         }
-
-        laserBeam.Show(cam.transform.position, endPoint, true);
     }
 }

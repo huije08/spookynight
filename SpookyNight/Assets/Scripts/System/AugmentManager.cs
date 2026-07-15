@@ -15,26 +15,52 @@ public enum AugmentType
 }
 
 [System.Serializable]
+public class AugmentLevel
+{
+    public string description;
+    public float value;
+}
+
+[System.Serializable]
 public class Augment
 {
     public string augmentName;
-    public string description;
     public AugmentType type;
-    public float value;
+    public Sprite icon;
+    public AugmentLevel[] levels;
+
+    [HideInInspector] public int currentLevel = 0;
+
+    public int MaxLevel => levels.Length;
+    public bool IsMaxLevel => currentLevel >= MaxLevel;
+    public bool IsOwned => currentLevel > 0;
+
+    public string GetNextDesc()
+    {
+        if (IsMaxLevel) return "최대 레벨";
+        return levels[currentLevel].description;
+    }
 }
 
 public class AugmentManager : MonoBehaviour
 {
     public static AugmentManager Instance;
 
+    [Header("증강 아이콘")]
+    public Sprite multiShotIcon;
+    public Sprite chargeShotIcon;
+    public Sprite damageUpIcon;
+    public Sprite fireRateIcon;
+    public Sprite piercingIcon;
+    public Sprite maxHpIcon;
+    public Sprite lifestealIcon;
+    public Sprite shieldIcon;
+
     private List<Augment> allAugments = new List<Augment>();
-    private List<AugmentType> ownedAugments = new List<AugmentType>();
+    private List<Augment> currentChoices = new List<Augment>();
 
     private PlayerStats playerStats;
     private PlayerShooting playerShooting;
-
-    // 현재 제시된 증강 3개
-    private List<Augment> currentChoices = new List<Augment>();
 
     void Awake()
     {
@@ -44,7 +70,7 @@ public class AugmentManager : MonoBehaviour
 
     void Start()
     {
-        playerStats    = FindObjectOfType<PlayerStats>();
+        playerStats = FindObjectOfType<PlayerStats>();
         playerShooting = FindObjectOfType<PlayerShooting>();
         InitAugments();
     }
@@ -53,18 +79,97 @@ public class AugmentManager : MonoBehaviour
     {
         allAugments = new List<Augment>
         {
-            new Augment { augmentName = "멀티샷",    description = "레이저를 3발 동시에 발사",      type = AugmentType.MultiShot,  value = 3    },
-            new Augment { augmentName = "차지샷",    description = "우클릭으로 강력한 차지샷 발사",  type = AugmentType.ChargeShot, value = 3f   },
-            new Augment { augmentName = "과부하",    description = "데미지 +25",                    type = AugmentType.DamageUp,   value = 25f  },
-            new Augment { augmentName = "급속 냉각", description = "발사 속도 30% 증가",            type = AugmentType.FireRateUp, value = 0.3f },
-            new Augment { augmentName = "관통 레이저",description = "레이저가 적을 관통",           type = AugmentType.Piercing,   value = 0    },
-            new Augment { augmentName = "강화 장갑", description = "최대 HP +50",                  type = AugmentType.MaxHpUp,    value = 50f  },
-            new Augment { augmentName = "흡혈",      description = "데미지의 15%를 HP로 회복",      type = AugmentType.Lifesteal,  value = 0.15f},
-            new Augment { augmentName = "에너지 실드",description = "피격 시 20% 확률로 무효화",    type = AugmentType.Shield,     value = 0.2f },
+            new Augment {
+                augmentName = "점사",
+                type = AugmentType.MultiShot,
+                icon = multiShotIcon,           // ← Inspector 연결값 사용
+                levels = new AugmentLevel[]
+                {
+                    new AugmentLevel { description = "한 번 클릭에 2발 점사", value = 2 },
+                    new AugmentLevel { description = "한 번 클릭에 3발 점사", value = 3 },
+                    new AugmentLevel { description = "한 번 클릭에 5발 점사", value = 5 },
+                }
+            },
+            new Augment {
+                augmentName = "차지샷",
+                type = AugmentType.ChargeShot,
+                icon = chargeShotIcon,          // ← Inspector 연결값 사용
+                levels = new AugmentLevel[]
+                {
+                    new AugmentLevel { description = "차지샷 해금 (데미지 2배)", value = 2f },
+                    new AugmentLevel { description = "차지샷 데미지 3배",        value = 3f },
+                    new AugmentLevel { description = "차지샷 데미지 5배",        value = 5f },
+                }
+            },
+            new Augment {
+                augmentName = "과부하",
+                type = AugmentType.DamageUp,
+                icon = damageUpIcon,            // ← Inspector 연결값 사용
+                levels = new AugmentLevel[]
+                {
+                    new AugmentLevel { description = "데미지 +15", value = 15f },
+                    new AugmentLevel { description = "데미지 +25", value = 25f },
+                    new AugmentLevel { description = "데미지 +40", value = 40f },
+                }
+            },
+            new Augment {
+                augmentName = "급속 냉각",
+                type = AugmentType.FireRateUp,
+                icon = fireRateIcon,            // ← Inspector 연결값 사용
+                levels = new AugmentLevel[]
+                {
+                    new AugmentLevel { description = "발사속도 20% 증가", value = 0.2f },
+                    new AugmentLevel { description = "발사속도 30% 증가", value = 0.3f },
+                    new AugmentLevel { description = "발사속도 40% 증가", value = 0.4f },
+                }
+            },
+            new Augment {
+                augmentName = "관통 레이저",
+                type = AugmentType.Piercing,
+                icon = piercingIcon,            // ← Inspector 연결값 사용
+                levels = new AugmentLevel[]
+                {
+                    new AugmentLevel { description = "레이저 관통",          value = 0f },
+                    new AugmentLevel { description = "관통 + 범위 확대",      value = 1f },
+                    new AugmentLevel { description = "관통 + 범위 대폭 확대", value = 2f },
+                }
+            },
+            new Augment {
+                augmentName = "강화 장갑",
+                type = AugmentType.MaxHpUp,
+                icon = maxHpIcon,               // ← Inspector 연결값 사용
+                levels = new AugmentLevel[]
+                {
+                    new AugmentLevel { description = "최대 HP +30", value = 30f },
+                    new AugmentLevel { description = "최대 HP +50", value = 50f },
+                    new AugmentLevel { description = "최대 HP +80", value = 80f },
+                }
+            },
+            new Augment {
+                augmentName = "흡혈",
+                type = AugmentType.Lifesteal,
+                icon = lifestealIcon,           // ← Inspector 연결값 사용
+                levels = new AugmentLevel[]
+                {
+                    new AugmentLevel { description = "데미지 10% 흡혈", value = 0.1f },
+                    new AugmentLevel { description = "데미지 20% 흡혈", value = 0.1f },
+                    new AugmentLevel { description = "데미지 30% 흡혈", value = 0.1f },
+                }
+            },
+            new Augment {
+                augmentName = "에너지 실드",
+                type = AugmentType.Shield,
+                icon = shieldIcon,              // ← Inspector 연결값 사용
+                levels = new AugmentLevel[]
+                {
+                    new AugmentLevel { description = "15% 확률 피격 무효", value = 0.15f },
+                    new AugmentLevel { description = "25% 확률 피격 무효", value = 0.10f },
+                    new AugmentLevel { description = "40% 확률 피격 무효", value = 0.15f },
+                }
+            },
         };
     }
 
-    // ─── 증강 UI 열기 ─────────────────────────────────────────
     public void OpenAugmentUI()
     {
         currentChoices = GetRandomAugments();
@@ -72,17 +177,15 @@ public class AugmentManager : MonoBehaviour
         UIManager.Instance.ShowAugmentUI(currentChoices);
     }
 
-    // ─── 랜덤 3개 뽑기 ───────────────────────────────────────
     List<Augment> GetRandomAugments()
     {
         return allAugments
-            .Where(a => !IsOneTime(a.type) || !ownedAugments.Contains(a.type))
+            .Where(a => !a.IsMaxLevel)
             .OrderBy(_ => Random.value)
             .Take(3)
             .ToList();
     }
 
-    // ─── 증강 선택 (UI에서 호출) ──────────────────────────────
     public void SelectAugment(int index)
     {
         if (index < 0 || index >= currentChoices.Count) return;
@@ -91,50 +194,45 @@ public class AugmentManager : MonoBehaviour
         UIManager.Instance.HideAugmentUI();
     }
 
-    // ─── 증강 적용 ────────────────────────────────────────────
     void ApplyAugment(Augment augment)
     {
-        ownedAugments.Add(augment.type);
+        float value = augment.levels[augment.currentLevel].value;
 
         switch (augment.type)
         {
             case AugmentType.MultiShot:
                 playerShooting.hasMultiShot = true;
-                playerShooting.bulletCount  = (int)augment.value;
+                playerShooting.bulletCount = (int)value;
+                playerShooting.burstInterval = 0.08f;
                 break;
             case AugmentType.ChargeShot:
-                playerShooting.hasChargeShot    = true;
-                playerShooting.chargeMultiplier = augment.value;
+                playerShooting.hasChargeShot = true;
+                playerShooting.chargeMultiplier = value;
                 break;
             case AugmentType.DamageUp:
-                playerShooting.damage += augment.value;
+                playerShooting.damage += value;
                 break;
             case AugmentType.FireRateUp:
-                playerShooting.fireRate *= (1f - augment.value);
-                playerShooting.fireRate  = Mathf.Max(0.05f, playerShooting.fireRate);
+                playerShooting.fireRate *= (1f - value);
+                playerShooting.fireRate = Mathf.Max(0.05f, playerShooting.fireRate);
                 break;
             case AugmentType.Piercing:
                 playerShooting.hasPiercing = true;
+                playerShooting.piercingRadius = 0.4f + value * 0.3f;
                 break;
             case AugmentType.MaxHpUp:
-                playerStats.maxHp += augment.value;
-                playerStats.Heal(augment.value);
+                playerStats.maxHp += value;
+                playerStats.Heal(value);
                 break;
             case AugmentType.Lifesteal:
-                playerStats.lifesteal += augment.value;
+                playerStats.lifesteal += value;
                 break;
             case AugmentType.Shield:
-                playerStats.shieldChance += augment.value;
+                playerStats.shieldChance += value;
                 break;
         }
 
-        Debug.Log($"증강 적용: {augment.augmentName}");
-    }
-
-    bool IsOneTime(AugmentType type)
-    {
-        return type == AugmentType.MultiShot  ||
-               type == AugmentType.ChargeShot ||
-               type == AugmentType.Piercing;
+        augment.currentLevel++;
+        Debug.Log($"{augment.augmentName} Lv{augment.currentLevel} 적용!");
     }
 }
