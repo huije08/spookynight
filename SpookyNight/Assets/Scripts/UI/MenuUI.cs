@@ -20,6 +20,6 @@ public class MenuUI : MonoBehaviour
     void OnExitClicked()
     {
         Application.Quit();
-        Debug.Log("게임 종료");
+        // Debug.Log("게임 종료");
     }
 }

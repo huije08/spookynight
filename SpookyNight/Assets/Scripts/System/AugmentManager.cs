@@ -56,6 +56,9 @@ public class AugmentManager : MonoBehaviour
     public Sprite lifestealIcon;
     public Sprite shieldIcon;
 
+    [Header("리롤 설정")]
+    public int rerollCost = 15;             // 리롤 비용 (호박)
+
     private List<Augment> allAugments = new List<Augment>();
     private List<Augment> currentChoices = new List<Augment>();
 
@@ -82,7 +85,7 @@ public class AugmentManager : MonoBehaviour
             new Augment {
                 augmentName = "점사",
                 type = AugmentType.MultiShot,
-                icon = multiShotIcon,           // ← Inspector 연결값 사용
+                icon = multiShotIcon,
                 levels = new AugmentLevel[]
                 {
                     new AugmentLevel { description = "한 번 클릭에 2발 점사", value = 2 },
@@ -93,7 +96,7 @@ public class AugmentManager : MonoBehaviour
             new Augment {
                 augmentName = "차지샷",
                 type = AugmentType.ChargeShot,
-                icon = chargeShotIcon,          // ← Inspector 연결값 사용
+                icon = chargeShotIcon,
                 levels = new AugmentLevel[]
                 {
                     new AugmentLevel { description = "차지샷 해금 (데미지 2배)", value = 2f },
@@ -104,7 +107,7 @@ public class AugmentManager : MonoBehaviour
             new Augment {
                 augmentName = "과부하",
                 type = AugmentType.DamageUp,
-                icon = damageUpIcon,            // ← Inspector 연결값 사용
+                icon = damageUpIcon,
                 levels = new AugmentLevel[]
                 {
                     new AugmentLevel { description = "데미지 +15", value = 15f },
@@ -115,7 +118,7 @@ public class AugmentManager : MonoBehaviour
             new Augment {
                 augmentName = "급속 냉각",
                 type = AugmentType.FireRateUp,
-                icon = fireRateIcon,            // ← Inspector 연결값 사용
+                icon = fireRateIcon,
                 levels = new AugmentLevel[]
                 {
                     new AugmentLevel { description = "발사속도 20% 증가", value = 0.2f },
@@ -126,7 +129,7 @@ public class AugmentManager : MonoBehaviour
             new Augment {
                 augmentName = "관통 레이저",
                 type = AugmentType.Piercing,
-                icon = piercingIcon,            // ← Inspector 연결값 사용
+                icon = piercingIcon,
                 levels = new AugmentLevel[]
                 {
                     new AugmentLevel { description = "레이저 관통",          value = 0f },
@@ -137,7 +140,7 @@ public class AugmentManager : MonoBehaviour
             new Augment {
                 augmentName = "강화 장갑",
                 type = AugmentType.MaxHpUp,
-                icon = maxHpIcon,               // ← Inspector 연결값 사용
+                icon = maxHpIcon,
                 levels = new AugmentLevel[]
                 {
                     new AugmentLevel { description = "최대 HP +30", value = 30f },
@@ -148,7 +151,7 @@ public class AugmentManager : MonoBehaviour
             new Augment {
                 augmentName = "흡혈",
                 type = AugmentType.Lifesteal,
-                icon = lifestealIcon,           // ← Inspector 연결값 사용
+                icon = lifestealIcon,
                 levels = new AugmentLevel[]
                 {
                     new AugmentLevel { description = "데미지 10% 흡혈", value = 0.1f },
@@ -159,7 +162,7 @@ public class AugmentManager : MonoBehaviour
             new Augment {
                 augmentName = "에너지 실드",
                 type = AugmentType.Shield,
-                icon = shieldIcon,              // ← Inspector 연결값 사용
+                icon = shieldIcon,
                 levels = new AugmentLevel[]
                 {
                     new AugmentLevel { description = "15% 확률 피격 무효", value = 0.15f },
@@ -170,11 +173,29 @@ public class AugmentManager : MonoBehaviour
         };
     }
 
+    // 증강 UI 열기
     public void OpenAugmentUI()
     {
         currentChoices = GetRandomAugments();
         Time.timeScale = 0f;
         UIManager.Instance.ShowAugmentUI(currentChoices);
+    }
+
+    // 리롤 (UI 리롤 버튼에서 호출)
+    public void Reroll()
+    {
+        if (playerStats.pumpkins < rerollCost)
+        {
+            Debug.Log("호박 부족!");
+            return;
+        }
+
+        playerStats.pumpkins -= rerollCost;
+        UIManager.Instance.UpdatePumpkin(playerStats.pumpkins);
+
+        currentChoices = GetRandomAugments();
+        UIManager.Instance.ShowAugmentUI(currentChoices);
+        Debug.Log($"리롤! 남은 호박: {playerStats.pumpkins}개");
     }
 
     List<Augment> GetRandomAugments()
@@ -186,6 +207,7 @@ public class AugmentManager : MonoBehaviour
             .ToList();
     }
 
+    // 카드 선택
     public void SelectAugment(int index)
     {
         if (index < 0 || index >= currentChoices.Count) return;

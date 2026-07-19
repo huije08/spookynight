@@ -31,13 +31,13 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI[] augmentNameTexts; // 버튼별 이름
     public TextMeshProUGUI[] augmentDescTexts; // 버튼별 설명
     public Image[] augmentIcons;               // 버튼 아이콘
+    public Button rerollButton;
 
     [Header("상점 UI")]
     public GameObject shopPanel;
     public Button[] shopItemButtons;            // 아이템 슬롯 3개
     public TextMeshProUGUI[] shopItemNameTexts;
     public TextMeshProUGUI[] shopItemCostTexts;
-    public Button rerollButton;
     public Button shopCloseButton;
 
     void Awake()
@@ -48,27 +48,30 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        gameOverPanel.SetActive(false);
-        gameClearPanel.SetActive(false);
-        augmentPanel.SetActive(false);
-        shopPanel.SetActive(false);
-        waveAnnounceText.gameObject.SetActive(false);
+        // 증강 버튼
+        for (int i = 0; i < augmentButtons.Length; i++)
+        {
+            int idx = i;
+            augmentButtons[i].onClick.AddListener(
+                () => AugmentManager.Instance.SelectAugment(idx));
+        }
 
-        // 상점 버튼 연결
+        // 증강 리롤 버튼 ← AugmentManager.Reroll() 호출
+        rerollButton.onClick.AddListener(() => AugmentManager.Instance.Reroll());
+
+        // 상점 버튼
         for (int i = 0; i < shopItemButtons.Length; i++)
         {
             int idx = i;
             shopItemButtons[i].onClick.AddListener(() => ShopManager.Instance.BuyItem(idx));
         }
-        rerollButton.onClick.AddListener(() => ShopManager.Instance.Reroll());
+
+        // 상점 닫기
         shopCloseButton.onClick.AddListener(() => ShopManager.Instance.CloseShop());
 
-        // 증강 버튼 연결
-        for (int i = 0; i < augmentButtons.Length; i++)
-        {
-            int idx = i;
-            augmentButtons[i].onClick.AddListener(() => AugmentManager.Instance.SelectAugment(idx));
-        }
+        // 패널 끄기
+        augmentPanel.SetActive(false);
+        shopPanel.SetActive(false);
     }
 
     // ─── HUD ──────────────────────────────────────────────────
@@ -81,7 +84,7 @@ public class UIManager : MonoBehaviour
     public void UpdatePumpkin(int count)
     {
         if (pumpkinText != null)
-            pumpkinText.text = $"호박 {count}개";
+            pumpkinText.text = $"{count}";
     }
 
     public void UpdateHp(float current, float max)
