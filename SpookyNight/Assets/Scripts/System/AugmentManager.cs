@@ -186,7 +186,7 @@ public class AugmentManager : MonoBehaviour
     {
         if (playerStats.pumpkins < rerollCost)
         {
-            Debug.Log("호박 부족!");
+            //Debug.Log("호박 부족!");
             return;
         }
 
@@ -195,7 +195,7 @@ public class AugmentManager : MonoBehaviour
 
         currentChoices = GetRandomAugments();
         UIManager.Instance.ShowAugmentUI(currentChoices);
-        Debug.Log($"리롤! 남은 호박: {playerStats.pumpkins}개");
+        //Debug.Log($"리롤! 남은 호박: {playerStats.pumpkins}개");
     }
 
     List<Augment> GetRandomAugments()

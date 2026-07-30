@@ -2389,7 +2389,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 346199240}
-  m_Father: {fileID: 1022889633}
+  m_Father: {fileID: 842010691}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9015,6 +9015,44 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8547890411414902292, guid: 3689431dc4e48cc45aa1b7a8d1121cb2, type: 3}
   m_PrefabInstance: {fileID: 840431390}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &842010690
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 842010691}
+  m_Layer: 5
+  m_Name: buttons
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &842010691
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842010690}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 248492713}
+  - {fileID: 948759737}
+  - {fileID: 1945632632}
+  m_Father: {fileID: 1022889633}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &842667888
 GameObject:
   m_ObjectHideFlags: 0
@@ -9413,7 +9451,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 4.34, y: -5.1}
-  m_SizeDelta: {x: 154.58, y: 100}
+  m_SizeDelta: {x: 301.1, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &872449737
 MonoBehaviour:
@@ -9448,7 +9486,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: TIPs
+  m_Text: 'Settings
+
+'
 --- !u!222 &872449738
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10697,12 +10737,12 @@ GameObject:
   - component: {fileID: 948759739}
   - component: {fileID: 948759738}
   m_Layer: 5
-  m_Name: TIPs
+  m_Name: Setting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &948759737
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10716,12 +10756,12 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 872449736}
-  m_Father: {fileID: 1022889633}
+  m_Father: {fileID: 842010691}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -694.7, y: -395.09998}
-  m_SizeDelta: {x: 209.3, y: 106.20001}
+  m_SizeDelta: {x: 265.47, y: 106.20001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &948759738
 MonoBehaviour:
@@ -11885,10 +11925,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 248492713}
-  - {fileID: 948759737}
-  - {fileID: 1945632632}
   - {fileID: 547430841}
+  - {fileID: 842010691}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -12684,6 +12722,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startButton: {fileID: 248492714}
   exitButton: {fileID: 1945632633}
+  settingButton: {fileID: 0}
 --- !u!114 &1089814080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19934,7 +19973,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 359476735}
-  m_Father: {fileID: 1022889633}
+  m_Father: {fileID: 842010691}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

@@ -33,7 +33,8 @@ public class GameManager : MonoBehaviour
     {
         ResetStats();
         isPlaying = true;
-        SceneManager.LoadScene("GameScene");
+        PlayerPrefs.SetString("NextScene", "GameScene");
+        SceneManager.LoadScene("LoadingScene");
     }
 
     public void GameOver()
@@ -64,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         isPlaying = false;
-        SceneManager.LoadScene("MenuScene");
+        SceneManager.LoadScene("StartScene");
     }
 
     void ResetStats()

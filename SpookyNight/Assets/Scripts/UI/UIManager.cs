@@ -74,7 +74,6 @@ public class UIManager : MonoBehaviour
         shopPanel.SetActive(false);
     }
 
-    // ─── HUD ──────────────────────────────────────────────────
     public void UpdateWave(int wave, int maxWave)
     {
         if (waveText != null)
@@ -99,7 +98,6 @@ public class UIManager : MonoBehaviour
             ammoText.text = $"{current} / {max}";
     }
 
-    // ─── 웨이브 알림 ──────────────────────────────────────────
     public void ShowWaveAnnounce(int wave)
     {
         StartCoroutine(WaveAnnounceCoroutine(wave));
@@ -113,17 +111,19 @@ public class UIManager : MonoBehaviour
         waveAnnounceText.gameObject.SetActive(false);
     }
 
-    // ─── 게임오버 ─────────────────────────────────────────────
+    // 게임오버
     public void ShowGameOver()
     {
         gameOverPanel.SetActive(true);
         StartCoroutine(WaitForAnyKey());
     }
 
-    // ─── 게임 클리어 ──────────────────────────────────────────
+    //  게임 클리어 
     public void ShowGameClear()
     {
         gameClearPanel.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         clearTimeText.text    = $"클리어 타임   {GameManager.Instance.GetFormattedTime()}";
         clearPumpkinText.text = $"수집한 호박   {GameManager.Instance.totalPumpkins} 개";
         clearKillText.text    = $"처치한 유령   {GameManager.Instance.totalKills} 마리";
@@ -139,10 +139,12 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.GoToMenu();
     }
 
-    // ─── 증강 UI ──────────────────────────────────────────────
+    // 증강 UI 
     public void ShowAugmentUI(List<Augment> choices)
     {
         augmentPanel.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         for (int i = 0; i < augmentButtons.Length; i++)
         {
@@ -184,12 +186,16 @@ public class UIManager : MonoBehaviour
     public void HideAugmentUI()
     {
         augmentPanel.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
-    // ─── 상점 UI ──────────────────────────────────────────────
+    // 상점 UI 
     public void ShowShopUI(List<ShopManager.ShopItem> items)
     {
         shopPanel.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         UpdateShopUI(items);
     }
 
@@ -215,5 +221,7 @@ public class UIManager : MonoBehaviour
     public void HideShopUI()
     {
         shopPanel.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }

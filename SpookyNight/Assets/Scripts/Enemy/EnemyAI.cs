@@ -40,9 +40,7 @@ public class EnemyAI : EnemyBase
         transform.position += direction * moveSpeed * Time.deltaTime;
 
         // 플레이어 바라보기 (Y축만)
-        transform.LookAt(new Vector3(player.position.x,
-                                     transform.position.y,
-                                     player.position.z));
+        transform.LookAt(new Vector3(player.position.x, transform.position.y, player.position.z));
     }
 
     void TryAttack()

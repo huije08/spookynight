@@ -11,6 +11,11 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 5f;
     public float gravity = -20f;
 
+    [Header("대쉬")]
+    public float dashSpeed = 15f;
+    public float dashTime = 0.2f;
+    public float dashCooldown = 1f;
+
     private CharacterController controller;
     private Camera cam;
     private float verticalRotation = 0f;
@@ -30,6 +35,7 @@ public class PlayerController : MonoBehaviour
         Move();
         Look();
         ApplyGravity();
+
     }
 
     void Move()

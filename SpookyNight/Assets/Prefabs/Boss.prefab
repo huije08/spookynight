@@ -637,7 +637,7 @@ GameObject:
   - component: {fileID: 4314042018070791668}
   - component: {fileID: 5892099638039888666}
   - component: {fileID: 9038934757025907386}
-  - component: {fileID: 1806006188447593969}
+  - component: {fileID: 6553428814596116050}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -734,7 +734,7 @@ CapsuleCollider:
   m_Height: 0.73960495
   m_Direction: 1
   m_Center: {x: -0.0075883865, y: 0.33836842, z: 0.00768137}
---- !u!114 &1806006188447593969
+--- !u!114 &6553428814596116050
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -743,17 +743,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 7040787468971028676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62fc02619b3cdf94aaaff9e928cfd376, type: 3}
+  m_Script: {fileID: 11500000, guid: 35b008ecec2a2b24a857bf9e53f866d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 100
-  moveSpeed: 3
+  maxHp: 500
+  moveSpeed: 4
   attackDamage: 10
   attackRange: 1.5
   attackCooldown: 1
-  expDrop: 10
+  expDrop: 50
   pumpkinPrefab: {fileID: 1899451271264018437, guid: 282eb148e4616844a91454cc2415c7b0, type: 3}
-  pumpkinDrop: 50
+  pumpkinDrop: 30
+  dashSpeed: 15
+  dashDuration: 1
+  dashCooldown: 4
+  tridentPrefab: {fileID: 8845264570263263734, guid: 4ef2a4b7a0ad6db42b68e7c54c270de0, type: 3}
+  tridentCount: 1
+  tridentSpread: 30
+  tridentSpeed: 10
+  tridentCooldown: 5
+  throwPoint: {fileID: 0}
+  dashWarnSound: {fileID: 0}
+  tridentWarnSound: {fileID: 0}
+  dashSound: {fileID: 0}
+  tridentThrowSound: {fileID: 0}
+  animator: {fileID: 0}
+  dashWarningEffect: {fileID: 0}
+  throwWarningEffect: {fileID: 0}
+  dashWarnDuration: 1
+  throwWarnDuration: 1.2
 --- !u!1 &8125736146504043513
 GameObject:
   m_ObjectHideFlags: 0

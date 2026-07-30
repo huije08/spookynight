@@ -54,7 +54,7 @@ public class EnemyBase : MonoBehaviour
     }
 
     // ─── 호박 드롭 ───────────────────────────────────────────
-    void DropPumpkins()
+    protected void DropPumpkins()
     {
         if (pumpkinPrefab == null) return;
 

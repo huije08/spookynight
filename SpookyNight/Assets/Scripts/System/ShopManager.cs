@@ -83,13 +83,13 @@ public class ShopManager : MonoBehaviour
 
         if (item.isSoldOut)
         {
-            Debug.Log("품절된 아이템!");
+            Debug.Log("품절된 아이템");
             return false;
         }
 
         if (playerStats.pumpkins < item.cost)
         {
-            Debug.Log("호박 부족!");
+            Debug.Log("호박 부족");
             return false;
         }
 

@@ -5,6 +5,7 @@ public class MenuUI : MonoBehaviour
 {
     public Button startButton;
     public Button exitButton;
+    public Button settingButton;
 
     void Start()
     {
@@ -20,6 +21,10 @@ public class MenuUI : MonoBehaviour
     void OnExitClicked()
     {
         Application.Quit();
-        // Debug.Log("게임 종료");
+    }
+
+    void OnSettingClicked()
+    {
+        
     }
 }

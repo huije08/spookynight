@@ -22,10 +22,10 @@ public class WaveManager : MonoBehaviour
     private int enemiesAlive = 0;
     private bool waveInProgress = false;
 
-    // { 좀비, 박쥐, 기사 }
+    //  일반, 도끼, 마녀 
     private int[,] waveTable = new int[,]
     {
-        { 5,  0,  0 },   // 웨이브 1
+        { 5,  0,  0 },   // 웨이브 1   웨이브3 마다 상점출현
         { 8,  0,  0 },   // 웨이브 2
         { 0,  0,  0 },   // 웨이브 3 → 상점
         { 6,  4,  0 },   // 웨이브 4
@@ -79,16 +79,16 @@ public class WaveManager : MonoBehaviour
     void SpawnWave(int wave)
     {
         int index = wave - 1;
-        int zombieCount = waveTable[index, 0];
-        int batCount    = waveTable[index, 1];
-        int knightCount = waveTable[index, 2];
+        int BooCount = waveTable[index, 0];
+        int AxeBooCount    = waveTable[index, 1];
+        int WitchBooCount = waveTable[index, 2];
 
-        enemiesAlive = zombieCount + batCount + knightCount;
+        enemiesAlive = BooCount + AxeBooCount + WitchBooCount;
         waveInProgress = true;
 
-        StartCoroutine(SpawnEnemies(BooPrefab,  zombieCount, 0.3f));
-        StartCoroutine(SpawnEnemies(AxeBooPrefab,     batCount,    0.2f));
-        StartCoroutine(SpawnEnemies(WitchBooPrefab,  knightCount, 0.5f));
+        StartCoroutine(SpawnEnemies(BooPrefab, BooCount, 0.3f));
+        StartCoroutine(SpawnEnemies(AxeBooPrefab, AxeBooCount, 0.2f));
+        StartCoroutine(SpawnEnemies(WitchBooPrefab, WitchBooCount, 0.5f));
     }
 
     IEnumerator SpawnEnemies(GameObject prefab, int count, float interval)
@@ -111,7 +111,7 @@ public class WaveManager : MonoBehaviour
         return new Vector3(playerPos.x + circle.x, 0f, playerPos.z + circle.y);
     }
 
-    // ─── 적 사망 시 호출 ──────────────────────────────────────
+    // 적 사망 시 호출
     public void OnEnemyDied()
     {
         enemiesAlive--;
@@ -119,18 +119,17 @@ public class WaveManager : MonoBehaviour
         if (enemiesAlive <= 0 && waveInProgress)
         {
             waveInProgress = false;
-            Debug.Log($"웨이브 {currentWave} 클리어!");
             StartCoroutine(StartNextWave());
         }
     }
 
-    // ─── 상점 닫고 재개 ───────────────────────────────────────
+    // 상점 닫고 재개
     public void ResumeAfterShop()
     {
         StartCoroutine(StartNextWave());
     }
 
-    // ─── 보스 스폰 ────────────────────────────────────────────
+    // 보스 스폰
     void SpawnBoss()
     {
         if (BossPrefab == null) return;
